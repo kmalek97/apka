@@ -13,7 +13,7 @@ const signInUser = (values: ISignInProps, navigation: any) => {
         firebase
           .firestore()
           .collection("users")
-          .doc(data.user.uid)
+          .doc(data.user?.uid)
           .get()
           .then((snapshot) => {
             console.log("ddd", snapshot.data()?.role);

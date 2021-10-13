@@ -21,6 +21,8 @@ const signInUser = (values: ISignInProps, navigation: any) => {
               role: snapshot.data()?.role,
               uid: firebase.auth().currentUser?.uid,
               email: firebase.auth().currentUser?.email,
+              nickname: snapshot.data()?.nickname,
+              downloadURL: snapshot.data()?.downloadURL,
             };
             dispatch({ type: LOADER_OFF });
             dispatch({ type: USER_DATA_CHANGE, payload: data });

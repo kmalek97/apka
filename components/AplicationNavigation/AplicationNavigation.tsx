@@ -6,7 +6,7 @@ import Login from "../../screens/login";
 import Register from "../../screens/register";
 import Home from "../../screens/home";
 import firebase from "firebase";
-import UserAccount from "../../screens/userAccount/UserAccount.screen";
+import UserAccount from "../../screens/userAccount";
 import MainScreen from "../../screens/mainScreen/MainScreen.screen";
 
 const Stack = createStackNavigator();

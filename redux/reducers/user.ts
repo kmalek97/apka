@@ -1,5 +1,4 @@
 import { AnyAction } from "redux";
-import firebase from "firebase";
 
 import { USER_DATA_CHANGE, USER_SET_AVATAR } from "../constants";
 

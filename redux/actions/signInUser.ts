@@ -1,5 +1,11 @@
 import firebase from "firebase";
-import { LOADER_OFF, LOADER_ON, USER_DATA_CHANGE } from "../constants";
+import {
+  GET_CATEGORIES_REQUEST,
+  LOADER_OFF,
+  LOADER_ON,
+  USER_DATA_CHANGE,
+} from "../constants";
+import getCategories from "./getCategories";
 import { ISignInProps } from "./types";
 
 const signInUser = (values: ISignInProps, navigation: any) => {
@@ -16,7 +22,6 @@ const signInUser = (values: ISignInProps, navigation: any) => {
           .doc(data.user?.uid)
           .get()
           .then((snapshot) => {
-            console.log("ddd", snapshot.data()?.role);
             const data = {
               role: snapshot.data()?.role,
               uid: firebase.auth().currentUser?.uid,
@@ -26,6 +31,7 @@ const signInUser = (values: ISignInProps, navigation: any) => {
             };
             dispatch({ type: LOADER_OFF });
             dispatch({ type: USER_DATA_CHANGE, payload: data });
+            getCategories()(dispatch);
           })
           .catch((error) => {
             dispatch({ type: LOADER_OFF });

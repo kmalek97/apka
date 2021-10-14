@@ -8,6 +8,7 @@ import Home from "../../screens/home";
 import firebase from "firebase";
 import UserAccount from "../../screens/userAccount";
 import MainScreen from "../../screens/mainScreen/MainScreen.screen";
+import AddEbookForm from "../../screens/addEbookForm";
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,14 @@ export default function AplicationNavigation() {
               name="UserAccount"
               component={UserAccount}
               options={{ headerShown: false, gestureEnabled: false }}
+            />
+            <Stack.Screen
+              name="AddEbookForm"
+              component={AddEbookForm}
+              options={{
+                headerBackTitle: "Profile",
+                headerTitle: "Add Ebook Form",
+              }}
             />
           </>
         ) : (

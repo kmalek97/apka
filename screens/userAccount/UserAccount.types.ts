@@ -13,4 +13,5 @@ export interface IUserAccountProps {
     userName: string;
     userAvatar: string;
   };
+  isLoading: boolean;
 }

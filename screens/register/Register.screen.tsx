@@ -26,11 +26,7 @@ const schema = Yup.object().shape({
   ),
 });
 
-export default function Register({
-  isLoading,
-  route,
-  registerUser,
-}: IRegisterProps) {
+const Register = ({ isLoading, route, registerUser }: IRegisterProps) => {
   const navigation = useNavigation();
 
   const handleOnSubmit = (values: IRegisterValues) => {
@@ -158,4 +154,6 @@ export default function Register({
       </ScrollView>
     </Wrapper>
   );
-}
+};
+
+export default Register;

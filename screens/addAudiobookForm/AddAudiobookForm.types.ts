@@ -1,6 +1,6 @@
 import { TextStyle, ViewStyle } from "react-native";
 
-export interface IAddEbookProps {
+export interface IAddAudiobookProps {
   isLoading: boolean;
   categories: ICategory[];
 }
@@ -10,7 +10,7 @@ export interface ICategory {
   name: string;
 }
 
-export interface IAddEbookFormStyles {
+export interface IAddAudiobookFormStyles {
   categoryContainer: ViewStyle;
   categoryItem: ViewStyle;
   formContainer: ViewStyle;
@@ -22,4 +22,6 @@ export interface IAddEbookFormStyles {
   buttonText: ViewStyle;
   dateButton: ViewStyle;
   dateInput: ViewStyle;
+  timeContainer: ViewStyle;
+  timeInput: ViewStyle;
 }

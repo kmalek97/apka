@@ -32,7 +32,6 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [2, 2],
-      // quality: 5,
       quality: 0.5,
     });
 
@@ -97,12 +96,20 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
               <Menu.Item onPress={signOut} title="Sign out" />
               <Divider />
               {userState.userRole === "admin" ? (
-                <Menu.Item
-                  onPress={() => {
-                    closeMenu(), navigation.navigate("AddEbookForm");
-                  }}
-                  title="Add ebook"
-                />
+                <>
+                  <Menu.Item
+                    onPress={() => {
+                      closeMenu(), navigation.navigate("AddEbookForm");
+                    }}
+                    title="Add ebook"
+                  />
+                  <Menu.Item
+                    onPress={() => {
+                      closeMenu(), navigation.navigate("AddAudiobookForm");
+                    }}
+                    title="Add audiobook"
+                  />
+                </>
               ) : null}
             </Menu>
           </Appbar.Header>

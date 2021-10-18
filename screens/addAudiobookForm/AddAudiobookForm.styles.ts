@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { IAddEbookFormStyles } from "./AddEbookForm.types";
+import { IAddAudiobookFormStyles } from "./AddAudiobookForm.types";
 
-export const styles = StyleSheet.create<IAddEbookFormStyles>({
+export const styles = StyleSheet.create<IAddAudiobookFormStyles>({
   categoryContainer: {
     marginTop: 25,
     flexDirection: "row",
@@ -63,5 +63,12 @@ export const styles = StyleSheet.create<IAddEbookFormStyles>({
   dateInput: {
     marginTop: 15,
     flexGrow: 1,
+  },
+  timeContainer: {
+    flexDirection: "row",
+    marginTop: 15,
+  },
+  timeInput: {
+    flexBasis: "50%",
   },
 });

@@ -22,4 +22,5 @@ export interface IAddEbookFormStyles {
   buttonText: ViewStyle;
   dateButton: ViewStyle;
   dateInput: ViewStyle;
+  coverButtonContainer: ViewStyle;
 }

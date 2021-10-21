@@ -1,4 +1,4 @@
-import {TextStyle, ViewStyle} from 'react-native';
+import { TextStyle, ViewStyle } from "react-native";
 
 export interface IEbookorAudiobooksStyles {
   buttonsContainer: ViewStyle;
@@ -7,4 +7,8 @@ export interface IEbookorAudiobooksStyles {
   buttonText: TextStyle;
 }
 
-export type ITypes = 'ebook' | 'audio';
+export type ITypes = "ebook" | "audio";
+
+export interface IIEbookorAudiobooksProps {
+  selectedType: ITypes;
+}

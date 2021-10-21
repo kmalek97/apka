@@ -71,4 +71,8 @@ export const styles = StyleSheet.create<IAddAudiobookFormStyles>({
   timeInput: {
     flexBasis: "50%",
   },
+  coverButtonContainer: {
+    color: "#fff",
+    marginTop: 15,
+  },
 });

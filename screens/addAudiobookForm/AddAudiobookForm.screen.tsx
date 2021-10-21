@@ -1,4 +1,5 @@
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
@@ -44,6 +45,7 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([1]);
   const [resultUri, setResultUri] = useState<any>({});
+  const [resultCoverUri, setResultCoverUri] = useState<string>("");
   const [loader, setLoader] = useState<Boolean>(false);
 
   const showDatePicker = () => {
@@ -77,12 +79,26 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
     }
   };
 
+  const pickCover = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [2, 2],
+      quality: 0.5,
+    });
+    if (result.cancelled) {
+      alert("Choose cover");
+      setResultCoverUri("");
+    } else {
+      setResultCoverUri(result?.uri);
+    }
+  };
+
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "audio/mpeg",
     });
     if (result.type === "success") {
-      console.log("result", result);
       return setResultUri(result);
     }
     alert("Choose file");
@@ -95,8 +111,17 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
     });
     const blob = await response?.blob();
 
-    if (blob) {
+    const responseCover = await fetch(resultCoverUri).catch((err) => {
+      alert("Cover error");
+    });
+    const blobCover = await responseCover?.blob();
+
+    if (blob && blobCover) {
       setLoader(true);
+
+      let downloadURL = "";
+      let coverURL = "";
+
       const task = firebase
         .storage()
         .ref()
@@ -109,7 +134,34 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
 
       const taskCompleted = () => {
         task.snapshot.ref.getDownloadURL().then((snapshot) => {
-          savePostData(snapshot, values);
+          downloadURL = snapshot;
+          const taskCover = firebase
+            .storage()
+            .ref()
+            .child(`cover/${Math.random().toString(36)}`)
+            .put(blobCover);
+
+          const taskCoverProgress = (snapshot: { bytesTransferred: any }) => {
+            console.log(`transferred: ${snapshot.bytesTransferred}`);
+          };
+
+          const taskCoverCompleted = () => {
+            taskCover.snapshot.ref.getDownloadURL().then((snapshotCover) => {
+              coverURL = snapshotCover;
+              savePostData(downloadURL, coverURL, values);
+            });
+          };
+
+          const taskCoverError = (snapshot: any) => {
+            alert(snapshot);
+          };
+
+          taskCover.on(
+            "state_changed",
+            taskCoverProgress,
+            taskCoverError,
+            taskCoverCompleted
+          );
         });
       };
 
@@ -121,22 +173,19 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
     }
   };
 
-  const savePostData = (downloadURL: string, values: any) => {
+  const savePostData = (downloadURL: string, coverURL: string, values: any) => {
     firebase
       .firestore()
       .collection("audiobooks")
       .add({
         downloadURL,
+        coverURL,
         ...values,
         creation: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(function () {
         navigation?.goBack();
       });
-  };
-
-  const proba = (values: any) => {
-    console.log("DATA: ", values);
   };
 
   return (
@@ -287,34 +336,50 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
                         keyboardType="numeric"
                       />
                     </View>
-                    <TextInput
-                      outlineColor="#E79A36"
-                      style={styles.dateInput}
-                      label={
-                        errors.publicationDate && touched.publicationDate
-                          ? errors.publicationDate
-                          : "publication date"
-                      }
-                      placeholder="publication date"
-                      mode="outlined"
-                      maxLength={15000}
-                      value={values.publicationDate}
-                      onChangeText={handleChange("publicationDate")}
-                    />
-                    <Button
-                      onPress={showDatePicker}
-                      mode="contained"
-                      compact={true}
-                      labelStyle={styles.dateButton}
-                    >
-                      Set Date
-                    </Button>
-                    <DateTimePickerModal
-                      isVisible={isDatePickerVisible}
-                      mode="date"
-                      onConfirm={(date) => handleConfirm(date, setFieldValue)}
-                      onCancel={hideDatePicker}
-                    />
+                    <View style={styles.coverButtonContainer}>
+                      <Button
+                        labelStyle={styles.dateButton}
+                        mode="contained"
+                        onPress={pickCover}
+                      >
+                        {resultCoverUri !== "" ? (
+                          <Icon name="check" color="#3cd113" size={17} />
+                        ) : (
+                          "Choose cover"
+                        )}
+                      </Button>
+                    </View>
+                    <View>
+                      <TextInput
+                        outlineColor="#E79A36"
+                        style={styles.dateInput}
+                        label={
+                          errors.publicationDate && touched.publicationDate
+                            ? errors.publicationDate
+                            : "publication date"
+                        }
+                        placeholder="publication date"
+                        mode="outlined"
+                        maxLength={15000}
+                        value={values.publicationDate}
+                        onChangeText={handleChange("publicationDate")}
+                      />
+                      <Button
+                        onPress={showDatePicker}
+                        mode="contained"
+                        compact={true}
+                        labelStyle={styles.dateButton}
+                      >
+                        Set Date
+                      </Button>
+                      <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={(date) => handleConfirm(date, setFieldValue)}
+                        onCancel={hideDatePicker}
+                      />
+                    </View>
+
                     <View style={styles.categoryContainer}>
                       {categories.map((category) => (
                         <Chip

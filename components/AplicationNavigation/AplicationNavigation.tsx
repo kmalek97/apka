@@ -10,8 +10,10 @@ import UserAccount from "../../screens/userAccount";
 import MainScreen from "../../screens/mainScreen/MainScreen.screen";
 import AddEbookForm from "../../screens/addEbookForm";
 import AddAudiobookForm from "../../screens/addAudiobookForm/";
+import FileScreen from "../../screens/fileScreen/FileScreen";
+import { RootStackParamList } from "./AplicationNavigation.types";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function AplicationNavigation() {
   const [initializing, setInitializing] = useState(true);
@@ -75,6 +77,14 @@ export default function AplicationNavigation() {
               options={{
                 headerBackTitle: "Profile",
                 headerTitle: "Add Audiobook Form",
+              }}
+            />
+            <Stack.Screen
+              name="FileScreen"
+              component={FileScreen}
+              options={{
+                headerBackTitle: "All books",
+                headerTitle: "",
               }}
             />
           </>

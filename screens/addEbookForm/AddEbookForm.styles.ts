@@ -64,4 +64,8 @@ export const styles = StyleSheet.create<IAddEbookFormStyles>({
     marginTop: 15,
     flexGrow: 1,
   },
+  coverButtonContainer: {
+    color: "#fff",
+    marginTop: 15,
+  },
 });

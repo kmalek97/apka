@@ -24,4 +24,5 @@ export interface IAddAudiobookFormStyles {
   dateInput: ViewStyle;
   timeContainer: ViewStyle;
   timeInput: ViewStyle;
+  coverButtonContainer: ViewStyle;
 }

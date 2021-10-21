@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
-import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
-import {SafeAreaView} from 'react-native';
+import React, { FC } from "react";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaView } from "react-native";
 
 declare global {
   namespace ReactNativePaper {
@@ -17,16 +17,17 @@ declare global {
 const theme = {
   ...DefaultTheme,
   // Specify custom property in nested object
-
+  dark: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#E79A36',
-    accent: '#fff',
-    surface: '#fff',
+    primary: "#E79A36",
+    accent: "#fff",
+    surface: "#fff",
+    myOwnColor: "#fff",
   },
 };
 
-const Wrapper: FC = ({children}) => {
+const Wrapper: FC = ({ children }) => {
   return (
     <PaperProvider theme={theme}>
       <SafeAreaView>{children}</SafeAreaView>

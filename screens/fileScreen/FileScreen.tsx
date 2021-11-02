@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React from "react";
-import { Image, View } from "react-native";
+import { Image, View, Text } from "react-native";
 import {
   Divider,
   Headline,
@@ -14,7 +14,7 @@ import themee from "../../components/Wrapper/theme";
 import { IFileScreenProps } from "./FileScreen.types";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
-import { styles } from "./FileScreen.styles";
+import { styles as useStyles } from "./FileScreen.styles";
 
 const FileScreen = () => {
   const {
@@ -24,8 +24,21 @@ const FileScreen = () => {
 
   const theme = useTheme(themee);
 
+  const styles = useStyles(theme);
+
+  const allCategories = () => {
+    return dataItem.categories.map((category) => {
+      console.log(category.name);
+      return (
+        <View key={category.id} style={styles.buttonStyle}>
+          <Text style={styles.buttonText}>{category.name}</Text>
+        </View>
+      );
+    });
+  };
+
   const differentContent = () => {
-    if (dataItem.numberOfPages > 0) {
+    if (Number(dataItem.numberOfPages) > 0) {
       return (
         <View>
           <Divider
@@ -37,23 +50,25 @@ const FileScreen = () => {
           </View>
           <Divider style={{ backgroundColor: themee.colors.primary }} />
           <View>
-            <View>
-              <Paragraph>Type </Paragraph>
+            <View style={styles.typeContainer}>
+              <Paragraph style={styles.paragraphStyle}>Type </Paragraph>
               <Headline>Ebook</Headline>
             </View>
-            <View>
-              <Paragraph>Categories </Paragraph>
-              <Headline>{}</Headline>
+            <View style={styles.typeContainer}>
+              <Paragraph>Categories</Paragraph>
+              <View style={styles.categoriesContainer}>{allCategories()}</View>
             </View>
-            <View>
-              <Paragraph>Publishing house </Paragraph>
+            <View style={styles.typeContainer}>
+              <Paragraph style={styles.paragraphStyle}>
+                Publishing house{" "}
+              </Paragraph>
               <Headline>{dataItem.publishing}</Headline>
             </View>
-            <View>
+            <View style={styles.typeContainer}>
               <Paragraph>Publication date </Paragraph>
               <Headline>{dataItem.publicationDate}</Headline>
             </View>
-            <View>
+            <View style={styles.typeContainer}>
               <Paragraph>Description </Paragraph>
               <Headline>{dataItem.description}</Headline>
             </View>
@@ -74,27 +89,27 @@ const FileScreen = () => {
         </View>
         <Divider style={{ backgroundColor: theme.colors.primary }} />
         <View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Lector </Paragraph>
             <Headline>{dataItem.lector}</Headline>
           </View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Type </Paragraph>
             <Headline>Audiobook</Headline>
           </View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Categories </Paragraph>
-            <Headline>{}</Headline>
+            <View style={styles.categoriesContainer}>{allCategories()}</View>
           </View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Publishing house </Paragraph>
             <Headline>{dataItem.publishing}</Headline>
           </View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Publication date </Paragraph>
             <Headline>{dataItem.publicationDate}</Headline>
           </View>
-          <View>
+          <View style={styles.typeContainer}>
             <Paragraph>Description </Paragraph>
             <Headline>{dataItem.description}</Headline>
           </View>

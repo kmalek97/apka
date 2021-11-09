@@ -1,8 +1,7 @@
-import { Theme } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import { IFileScreenStyles } from "./FileScreen.types";
 
-export const styles = (theme: Theme) =>
+export const styles = (theme: ReactNativePaper.Theme) =>
   StyleSheet.create<IFileScreenStyles>({
     screenScrollContainer: {
       minHeight: "100%",

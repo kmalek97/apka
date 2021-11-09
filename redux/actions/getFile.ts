@@ -22,7 +22,6 @@ const getFile = (option: string, lastElement?: any) => {
       payload: data,
     });
 
-    console.log("snapshot.docs.map((doc) => doc.data())", snapshot.docs);
     return snapshot.docs;
   };
 

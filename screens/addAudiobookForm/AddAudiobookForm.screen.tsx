@@ -97,7 +97,9 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "audio/mpeg",
+      copyToCacheDirectory: false,
     });
+
     if (result.type === "success") {
       return setResultUri(result);
     }
@@ -107,7 +109,7 @@ const AddAudiobookForm = ({ isLoading, categories }: IAddAudiobookProps) => {
 
   const uploadFile = async (values: any) => {
     const response = await fetch(resultUri.uri).catch((err) => {
-      alert("File error");
+      alert(`File error`);
     });
     const blob = await response?.blob();
 

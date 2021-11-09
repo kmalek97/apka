@@ -12,6 +12,7 @@ import AddEbookForm from "../../screens/addEbookForm";
 import AddAudiobookForm from "../../screens/addAudiobookForm/";
 import FileScreen from "../../screens/fileScreen/FileScreen";
 import { RootStackParamList } from "./AplicationNavigation.types";
+import ViewMedia from "../../screens/viewMedia/ViewMedia.screen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -87,6 +88,7 @@ export default function AplicationNavigation() {
                 headerTitle: "",
               }}
             />
+            <Stack.Screen name="ViewMedia" component={ViewMedia} />
           </>
         ) : (
           <>

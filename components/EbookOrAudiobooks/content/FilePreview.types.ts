@@ -25,6 +25,7 @@ export interface IItemsData extends firebase.firestore.DocumentData {
   numberOfPages?: string;
   author?: string;
   coverURL?: string;
+  downloadURL?: string;
   creation: any;
   publishing?: string;
   categories: [

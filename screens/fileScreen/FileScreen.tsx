@@ -1,6 +1,6 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
-import { Image, View, Text } from "react-native";
+import { Image, View, Text, TouchableOpacity } from "react-native";
 import {
   Divider,
   Headline,
@@ -15,12 +15,15 @@ import { IFileScreenProps } from "./FileScreen.types";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
 import { styles as useStyles } from "./FileScreen.styles";
+import { AntDesign } from "@expo/vector-icons";
 
 const FileScreen = () => {
   const {
     params: { dataItem },
   } = useRoute<IFileScreenProps>();
   console.log("PROPS: ", dataItem);
+
+  const navigation = useNavigation();
 
   const theme = useTheme(themee);
 
@@ -41,6 +44,16 @@ const FileScreen = () => {
     if (Number(dataItem.numberOfPages) > 0) {
       return (
         <View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ViewMedia", {
+                dataItem,
+              })
+            }
+            style={styles.iconAndTimeContainer}
+          >
+            <AntDesign name="play" size={44} color={theme.colors.primary} />
+          </TouchableOpacity>
           <Divider
             style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
           />
@@ -78,6 +91,16 @@ const FileScreen = () => {
     }
     return (
       <View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ViewMedia", {
+              dataItem,
+            })
+          }
+          style={styles.iconAndTimeContainer}
+        >
+          <AntDesign name="play" size={44} color={theme.colors.primary} />
+        </TouchableOpacity>
         <Divider
           style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
         />
@@ -117,8 +140,6 @@ const FileScreen = () => {
       </View>
     );
   };
-
-  console.log("theme.colors.primary", theme.colors.primary);
 
   return (
     <Wrapper>

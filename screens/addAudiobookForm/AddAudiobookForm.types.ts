@@ -1,8 +1,33 @@
+import { RouteProp } from "@react-navigation/native";
 import { TextStyle, ViewStyle } from "react-native";
+import { RootStackParamList } from "../../components/AplicationNavigation/AplicationNavigation.types";
 
 export interface IAddAudiobookProps {
   isLoading: boolean;
   categories: ICategory[];
+}
+
+export interface IItemProps {
+  title: string;
+  description: string;
+  lector?: string;
+  numberOfPages?: string;
+  author?: string;
+  coverURL?: string;
+  downloadURL?: string;
+  creation: any;
+  publishing?: string;
+  categories: [
+    object: {
+      id: number;
+      name: string;
+    }
+  ];
+  publicationDate: string;
+  time: {
+    hour: string;
+    minute: string;
+  };
 }
 
 export interface ICategory {
@@ -26,3 +51,8 @@ export interface IAddAudiobookFormStyles {
   timeInput: ViewStyle;
   coverButtonContainer: ViewStyle;
 }
+
+export type IAddAudiobookFormScreenProps = RouteProp<
+  RootStackParamList,
+  "AddAudiobookForm"
+>;

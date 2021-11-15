@@ -1,6 +1,6 @@
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import { Button, Chip, TextInput } from "react-native-paper";
@@ -14,6 +14,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import firebase from "firebase";
 import Icon from "react-native-vector-icons/FontAwesome";
+import {
+  IAddAudiobookFormScreenProps,
+  IItemProps,
+} from "../addAudiobookForm/AddAudiobookForm.types";
 
 const schema = Yup.object().shape({
   title: Yup.string()
@@ -32,17 +36,133 @@ const schema = Yup.object().shape({
 });
 
 const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([1]);
+  const [resultUri, setResultUri] = useState<any>({});
+  const [resultCoverUri, setResultCoverUri] = useState<string>("");
+  const [loader, setLoader] = useState<Boolean>(false);
+
+  const { params } = useRoute<IAddAudiobookFormScreenProps>();
+
+  const newData: IItemProps = params?.item?.data();
+
   const navigation = useNavigation();
 
   const handleOnSubmit = (values: any) => {
     uploadFile(values);
   };
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([1]);
-  const [resultUri, setResultUri] = useState<any>({});
-  const [resultCoverUri, setResultCoverUri] = useState<string>("");
-  const [loader, setLoader] = useState<Boolean>(false);
+  const updatePostData = (
+    downloadURL: string,
+    coverURL: string,
+    values: any
+  ) => {
+    setLoader(true);
+    firebase
+      .firestore()
+      .collection("ebooks")
+      .doc(params?.item.id)
+      .update({
+        ...values,
+        downloadURL,
+        coverURL,
+      })
+      .then(() => {
+        navigation?.goBack();
+      });
+  };
+
+  const updateFile = async (values: any) => {
+    setLoader(true);
+    let blob;
+    let blobCover: any;
+    if (
+      !resultUri.uri &&
+      !resultCoverUri &&
+      newData?.coverURL &&
+      newData?.downloadURL
+    ) {
+      return updatePostData(newData?.downloadURL, newData?.coverURL, values);
+    }
+    const response = await fetch(resultUri.uri || newData?.downloadURL).catch(
+      (err) => {
+        alert(`File error`);
+      }
+    );
+    blob = await response?.blob();
+
+    const responseCover = await fetch(
+      resultCoverUri || newData?.coverURL
+    ).catch((err) => {
+      alert("Cover error");
+    });
+    blobCover = await responseCover?.blob();
+
+    if (blobCover && blob) {
+      let downloadURL = "";
+      let coverURL = "";
+
+      const task = firebase
+        .storage()
+        .ref()
+        .child(`ebook/${Math.random().toString(36)}`)
+        .put(blob);
+
+      const taskProgress = (snapshot: { bytesTransferred: any }) => {
+        console.log(`transferred: ${snapshot.bytesTransferred}`);
+      };
+
+      const taskCompleted = () => {
+        task.snapshot.ref.getDownloadURL().then((snapshot) => {
+          downloadURL = snapshot;
+          const taskCover = firebase
+            .storage()
+            .ref()
+            .child(`cover/${Math.random().toString(36)}`)
+            .put(blobCover);
+
+          const taskCoverProgress = (snapshot: { bytesTransferred: any }) => {
+            console.log(`transferred: ${snapshot.bytesTransferred}`);
+          };
+
+          const taskCoverCompleted = () => {
+            taskCover.snapshot.ref.getDownloadURL().then((snapshotCover) => {
+              coverURL = snapshotCover;
+              updatePostData(downloadURL, coverURL, values);
+            });
+          };
+
+          const taskCoverError = (snapshot: any) => {
+            alert(snapshot);
+          };
+
+          taskCover.on(
+            "state_changed",
+            taskCoverProgress,
+            taskCoverError,
+            taskCoverCompleted
+          );
+        });
+      };
+
+      const taskError = (snapshot: any) => {
+        alert(snapshot);
+      };
+
+      task.on("state_changed", taskProgress, taskError, taskCompleted);
+    } else {
+      firebase
+        .firestore()
+        .collection("ebooks")
+        .doc(params?.item.id)
+        .update({
+          ...values,
+        })
+        .then(() => {
+          navigation?.goBack();
+        });
+    }
+  };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -82,11 +202,19 @@ const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
       aspect: [2, 2],
       quality: 0.5,
     });
-    if (result.cancelled) {
-      alert("Choose cover");
-      setResultCoverUri("");
+    if (params?.item === undefined) {
+      if (result.cancelled) {
+        alert("Choose cover");
+        setResultCoverUri("");
+      } else {
+        setResultCoverUri(result?.uri);
+      }
     } else {
-      setResultCoverUri(result?.uri);
+      if (result.cancelled) {
+        setResultCoverUri("");
+      } else {
+        setResultCoverUri(result?.uri);
+      }
     }
   };
 
@@ -94,11 +222,18 @@ const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
     });
-    if (result.type === "success") {
-      return setResultUri(result);
+    if (params?.item === undefined) {
+      if (result.type === "success") {
+        return setResultUri(result);
+      }
+      alert("Choose file");
+      setResultUri({});
+    } else {
+      if (result.type === "success") {
+        return setResultUri(result);
+      }
+      setResultUri({});
     }
-    alert("Choose file");
-    setResultUri({});
   };
 
   const uploadFile = async (values: any) => {
@@ -179,10 +314,30 @@ const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
         ...values,
         creation: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      .then(function () {
+      .then(() => {
         navigation?.goBack();
       });
   };
+
+  const diferentForminInitialValues = params?.item
+    ? {
+        title: newData.title,
+        author: newData.author,
+        description: newData.description,
+        publishing: newData.publishing,
+        numberOfPages: newData.numberOfPages,
+        publicationDate: newData.publicationDate,
+        categories: newData.categories.map((categories) => categories.id),
+      }
+    : {
+        title: "Nad Kamienicą",
+        author: "Mati Sarota - Zbąszynek",
+        description: "Taka sobie powieść o gównie.",
+        publishing: "Wydawnictwo Bobowa",
+        numberOfPages: "123",
+        publicationDate: "",
+        categories: [1],
+      };
 
   return (
     <Wrapper>
@@ -195,17 +350,11 @@ const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
               <SelfActivityIndicator />
             ) : (
               <Formik
-                initialValues={{
-                  title: "Nad Kamienicą",
-                  author: "Mati Sarota - Zbąszynek",
-                  description: "Taka sobie powieść o gównie.",
-                  publishing: "Wydawnictwo Bobowa",
-                  numberOfPages: "123",
-                  publicationDate: "",
-                  categories: [1],
-                }}
+                initialValues={diferentForminInitialValues}
                 validationSchema={schema}
-                onSubmit={(values) => handleOnSubmit(values)}
+                onSubmit={(values) =>
+                  newData ? updateFile(values) : handleOnSubmit(values)
+                }
               >
                 {({
                   handleChange,

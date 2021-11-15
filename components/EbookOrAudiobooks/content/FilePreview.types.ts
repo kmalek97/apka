@@ -2,6 +2,9 @@ import firebase from "firebase";
 
 export interface IFilePreviewProps {
   selectedType: string;
+  userState: {
+    userRole: string | null;
+  };
   ebooks: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[] & {
     empty: boolean;
   };

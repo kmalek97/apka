@@ -15,7 +15,7 @@ export type RootStackParamList = {
   Main: undefined;
   UserAccount: undefined;
   AddEbookForm: undefined;
-  AddAudiobookForm: undefined;
+  AddAudiobookForm: { item: IItemsData };
   FileScreen: { dataItem: IItemsData };
   Welcome: undefined;
   Login: undefined;

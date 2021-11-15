@@ -26,6 +26,35 @@ export const categoriesCreateEb = functions.firestore
     });
   });
 
+export const categoriesUpdateEb = functions.firestore
+  .document("ebooks/{ebookID}")
+  .onUpdate(async (change, context) => {
+    const categories = await (await db.collection("categories").get()).docs;
+
+    const oldData = JSON.stringify(change.before.data()?.categories);
+    const newData = JSON.stringify(change.after.data()?.categories);
+
+    const mappedCategories = categories.map((category) => ({
+      ...category.data(),
+      id: Number(category.id),
+    }));
+
+    const getCategory = () =>
+      change.after.data()?.categories.map((category: number) => {
+        return mappedCategories.find((value) => {
+          return value.id === category;
+        });
+      });
+
+    if (oldData !== newData) {
+      return db.collection("ebooks").doc(context.params.ebookID).update({
+        categories: getCategory(),
+      });
+    }
+
+    return;
+  });
+
 export const categoriesCreateAudio = functions.firestore
   .document("audiobooks/{audiobookID}")
   .onCreate(async (change, context) => {
@@ -45,6 +74,36 @@ export const categoriesCreateAudio = functions.firestore
     return db.collection("audiobooks").doc(context.params.audiobookID).update({
       categories: getCategory(),
     });
+  });
+
+export const categoriesUpdateAudio2 = functions.firestore
+  .document("audiobooks/{audiobookID}")
+  .onUpdate(async (change, context) => {
+    const categories = await (await db.collection("categories").get()).docs;
+
+    const oldData = JSON.stringify(change.before.data()?.categories);
+    const newData = JSON.stringify(change.after.data()?.categories);
+
+    const mappedCategories = categories.map((category) => ({
+      ...category.data(),
+      id: Number(category.id),
+    }));
+    const getCategory = () =>
+      change.after.data()?.categories.map((category: number) => {
+        return mappedCategories.find((value) => {
+          return value.id === category;
+        });
+      });
+
+    if (oldData !== newData) {
+      return db
+        .collection("audiobooks")
+        .doc(context.params.audiobookID)
+        .update({
+          categories: getCategory(),
+        });
+    }
+    return;
   });
 
 export const deleteUselessEb = functions.firestore

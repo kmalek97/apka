@@ -69,7 +69,7 @@ export default function AplicationNavigation() {
               component={AddEbookForm}
               options={{
                 headerBackTitle: "Profile",
-                headerTitle: "Add Ebook Form",
+                headerTitle: "Ebook Form",
               }}
             />
             <Stack.Screen
@@ -77,7 +77,7 @@ export default function AplicationNavigation() {
               component={AddAudiobookForm}
               options={{
                 headerBackTitle: "Profile",
-                headerTitle: "Add Audiobook Form",
+                headerTitle: "Audiobook Form",
               }}
             />
             <Stack.Screen

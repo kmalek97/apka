@@ -1,15 +1,14 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { IRegisterStyles } from "./Register.types";
 
 export const styles = StyleSheet.create<IRegisterStyles>({
   formContainer: {
+    height: Dimensions.get("window").height,
     alignItems: "center",
-    flex: 1,
     justifyContent: "center",
   },
   wrapper: {
     width: 300,
-    marginTop: "40%",
   },
   input: {
     marginTop: 15,

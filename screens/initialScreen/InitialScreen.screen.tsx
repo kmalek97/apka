@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Button } from "react-native-paper";
 import Wrapper from "../../components/Wrapper";
 
@@ -21,22 +21,24 @@ const InitialScreen = ({ loginPress, registerPress }: IInitialScreenProps) => {
   return (
     <Wrapper>
       <View style={styles.container}>
-        <Button
-          mode="outlined"
-          style={styles.button}
-          labelStyle={styles.buttonText}
-          onPress={login}
-        >
-          log in
-        </Button>
-        <Button
-          mode="outlined"
-          style={styles.button}
-          labelStyle={styles.buttonText}
-          onPress={register}
-        >
-          register
-        </Button>
+        <TouchableOpacity onPress={login}>
+          <Button
+            mode="outlined"
+            style={styles.button}
+            labelStyle={styles.buttonText}
+          >
+            log in
+          </Button>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={register}>
+          <Button
+            mode="outlined"
+            style={styles.button}
+            labelStyle={styles.buttonText}
+          >
+            register
+          </Button>
+        </TouchableOpacity>
       </View>
     </Wrapper>
   );

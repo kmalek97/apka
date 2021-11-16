@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import * as Yup from "yup";
 import SelfActivityIndicator from "../../components/ActivityIndicator/SelfActivityIndicator";
@@ -17,7 +17,7 @@ const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
-export default function Login({ signInUser, route, isLoading }: ILoginProps) {
+const Login = ({ signInUser, route, isLoading }: ILoginProps) => {
   const navigation = useNavigation();
 
   const handleOnSubmit = (values: any) => {
@@ -29,7 +29,7 @@ export default function Login({ signInUser, route, isLoading }: ILoginProps) {
       {isLoading ? (
         <SelfActivityIndicator />
       ) : (
-        <ScrollView>
+        <View>
           <View style={styles.formContainer}>
             <Formik
               initialValues={{
@@ -84,19 +84,22 @@ export default function Login({ signInUser, route, isLoading }: ILoginProps) {
                       </Text>
                     </View>
                   ) : null}
-                  <Button
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    onPress={handleSubmit}
-                  >
-                    Submit
-                  </Button>
+                  <TouchableOpacity onPress={() => handleSubmit()}>
+                    <Button
+                      style={styles.button}
+                      labelStyle={styles.buttonText}
+                    >
+                      Submit
+                    </Button>
+                  </TouchableOpacity>
                 </View>
               )}
             </Formik>
           </View>
-        </ScrollView>
+        </View>
       )}
     </Wrapper>
   );
-}
+};
+
+export default Login;

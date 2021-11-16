@@ -1,13 +1,14 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { ILoginStyles } from "./Login.types";
 
 export const styles = StyleSheet.create<ILoginStyles>({
   formContainer: {
+    height: Dimensions.get("window").height,
     alignItems: "center",
+    justifyContent: "center",
   },
   wrapper: {
     width: 300,
-    marginTop: "40%",
   },
   errorBottomText: {
     color: "#F00",

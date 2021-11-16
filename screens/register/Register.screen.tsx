@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Button, TextInput } from "react-native-paper";
 import { Formik } from "formik";
@@ -54,7 +54,7 @@ const Register = ({ isLoading, route, registerUser }: IRegisterProps) => {
 
   return (
     <Wrapper>
-      <ScrollView>
+      <View>
         <View style={styles.formContainer}>
           {isLoading ? (
             <SelfActivityIndicator />
@@ -139,19 +139,20 @@ const Register = ({ isLoading, route, registerUser }: IRegisterProps) => {
                     error={!!errors.confirmPassword && touched.confirmPassword}
                   />
                   {errorMessageText(route?.params?.wrongData)}
-                  <Button
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    onPress={handleSubmit}
-                  >
-                    Submit
-                  </Button>
+                  <TouchableOpacity onPress={() => handleSubmit()}>
+                    <Button
+                      style={styles.button}
+                      labelStyle={styles.buttonText}
+                    >
+                      Submit
+                    </Button>
+                  </TouchableOpacity>
                 </View>
               )}
             </Formik>
           )}
         </View>
-      </ScrollView>
+      </View>
     </Wrapper>
   );
 };

@@ -5,6 +5,8 @@ admin.initializeApp();
 const db = admin.firestore();
 const defaultStorage = admin.storage();
 
+admin.firestore().settings({ ignoreUndefinedProperties: true });
+
 export const categoriesCreateEb = functions.firestore
   .document("ebooks/{ebookID}")
   .onCreate(async (change, context) => {
@@ -34,6 +36,28 @@ export const categoriesUpdateEb = functions.firestore
     const oldData = JSON.stringify(change.before.data()?.categories);
     const newData = JSON.stringify(change.after.data()?.categories);
 
+    const oldDownloadUrl = change.before.data()?.downloadURL;
+    const newDownloadUrl = change.after.data()?.downloadURL;
+
+    const oldCoverUrl = change.before.data()?.coverURL;
+    const newCoverUrl = change.after.data()?.coverURL;
+
+    if (oldDownloadUrl !== newDownloadUrl) {
+      const bucket = defaultStorage.bucket();
+      const pattern = /(?<=2F)(.*)(?=\?)/gm;
+      const fileName = oldDownloadUrl.match(pattern);
+      const file = bucket.file(`ebook/${fileName}`);
+      file.delete();
+    }
+
+    if (oldCoverUrl !== newCoverUrl) {
+      const bucket = defaultStorage.bucket();
+      const pattern = /(?<=2F)(.*)(?=\?)/gm;
+      const fileName = oldCoverUrl.match(pattern);
+      const file = bucket.file(`cover/${fileName}`);
+      file.delete();
+    }
+
     const mappedCategories = categories.map((category) => ({
       ...category.data(),
       id: Number(category.id),
@@ -46,7 +70,10 @@ export const categoriesUpdateEb = functions.firestore
         });
       });
 
-    if (oldData !== newData) {
+    if (
+      oldData !== newData &&
+      getCategory().some((item: any) => item !== undefined)
+    ) {
       return db.collection("ebooks").doc(context.params.ebookID).update({
         categories: getCategory(),
       });
@@ -76,13 +103,35 @@ export const categoriesCreateAudio = functions.firestore
     });
   });
 
-export const categoriesUpdateAudio2 = functions.firestore
+export const categoriesUpdateAudio = functions.firestore
   .document("audiobooks/{audiobookID}")
   .onUpdate(async (change, context) => {
     const categories = await (await db.collection("categories").get()).docs;
 
     const oldData = JSON.stringify(change.before.data()?.categories);
     const newData = JSON.stringify(change.after.data()?.categories);
+
+    const oldDownloadUrl = change.before.data()?.downloadURL;
+    const newDownloadUrl = change.after.data()?.downloadURL;
+
+    const oldCoverUrl = change.before.data()?.coverURL;
+    const newCoverUrl = change.after.data()?.coverURL;
+
+    if (oldDownloadUrl !== newDownloadUrl) {
+      const bucket = defaultStorage.bucket();
+      const pattern = /(?<=2F)(.*)(?=\?)/gm;
+      const fileName = oldDownloadUrl.match(pattern);
+      const file = bucket.file(`audiobook/${fileName}`);
+      file.delete();
+    }
+
+    if (oldCoverUrl !== newCoverUrl) {
+      const bucket = defaultStorage.bucket();
+      const pattern = /(?<=2F)(.*)(?=\?)/gm;
+      const fileName = oldCoverUrl.match(pattern);
+      const file = bucket.file(`cover/${fileName}`);
+      file.delete();
+    }
 
     const mappedCategories = categories.map((category) => ({
       ...category.data(),
@@ -95,7 +144,10 @@ export const categoriesUpdateAudio2 = functions.firestore
         });
       });
 
-    if (oldData !== newData) {
+    if (
+      oldData !== newData &&
+      getCategory().some((item: any) => item !== undefined)
+    ) {
       return db
         .collection("audiobooks")
         .doc(context.params.audiobookID)

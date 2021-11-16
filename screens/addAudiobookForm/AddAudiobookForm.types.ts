@@ -13,7 +13,7 @@ export interface IItemProps {
   lector?: string;
   numberOfPages?: string;
   author?: string;
-  coverURL?: string;
+  coverURL: string;
   downloadURL?: string;
   creation: any;
   publishing?: string;

@@ -96,6 +96,7 @@ const AddEbookForm = ({ isLoading, categories }: IAddEbookProps) => {
     ).catch((err) => {
       alert("Cover error");
     });
+
     blobCover = await responseCover?.blob();
 
     if (blobCover && blob) {

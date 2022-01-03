@@ -3,6 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store";
 import * as firebase from "firebase";
+import { StripeProvider } from "@stripe/stripe-react-native";
 
 import AplicationNavigation from "./components/AplicationNavigation";
 
@@ -22,9 +23,11 @@ if (firebase.default.apps.length === 0) {
 
 function App() {
   return (
-    <Provider store={store}>
-      <AplicationNavigation />
-    </Provider>
+    <StripeProvider publishableKey="pk_test_51JwRDeI4IOxw6fNyLVSM5MLoIHELFJ6VatMjL584hZE4ZrkStNswDuINmjvcURfOdhIVF7m6U0MpJCQCEeGm2vcy00UUpYgvS4">
+      <Provider store={store}>
+        <AplicationNavigation />
+      </Provider>
+    </StripeProvider>
   );
 }
 

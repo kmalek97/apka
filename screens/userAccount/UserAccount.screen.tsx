@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Appbar, Avatar, Divider, Headline, Menu } from "react-native-paper";
+import {
+  Appbar,
+  Avatar,
+  Button,
+  Divider,
+  Headline,
+  Menu,
+} from "react-native-paper";
 import firebase from "firebase";
 import Wrapper from "../../components/Wrapper";
 import { styles } from "./UserAccount.styles";
@@ -129,6 +136,9 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
               )}
             </TouchableOpacity>
             <Headline>{userState.userName}</Headline>
+            <Button onPress={() => navigation.navigate("Payment")}>
+              dadada
+            </Button>
           </View>
         </>
       )}

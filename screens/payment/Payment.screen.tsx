@@ -5,13 +5,73 @@ import {
   useStripe,
 } from "@stripe/stripe-react-native";
 import firebase from "firebase";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button, Text } from "react-native-paper";
 import base64 from "base-64";
 
+const API_URL = "http://localhost:3000";
+
 const Payment = () => {
   const { confirmPayment } = useStripe();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
+
+  const fetchPaymentSheetParams = async () => {
+    const response = await fetch(`${API_URL}/payment-sheet`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const { paymentIntent, ephemeralKey, customer } = await response.json();
+
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  const initializePaymentSheet = async () => {
+    const { paymentIntent, ephemeralKey, customer } =
+      await fetchPaymentSheetParams();
+
+    const { error } = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+    });
+    if (!error) {
+      setLoading(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const { error } = await presentPaymentSheet();
+    const uidd = await firebase.auth().currentUser?.uid;
+
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(uidd)
+        .collection("checkout_sessions")
+        .add({
+          client: "mobile",
+          mode: "payment",
+          amount: 1099,
+          currency: "eur",
+        });
+      Alert.alert("Success", "Your order is confirmed!");
+    }
+  };
+
+  useEffect(() => {
+    initializePaymentSheet();
+  }, []);
 
   const fetchPaymentIntentClientSecret = async () => {
     console.log("test2");
@@ -137,7 +197,7 @@ const Payment = () => {
         style={styles.cardField}
         cardStyle={inputStyles}
       />
-      <Button onPress={handlePayPress}>Pay</Button>
+      <Button onPress={openPaymentSheet}>Pay</Button>
       <Text>asd</Text>
     </View>
   );

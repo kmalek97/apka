@@ -21,7 +21,7 @@ const FileScreen = () => {
   const {
     params: { dataItem },
   } = useRoute<IFileScreenProps>();
-  console.log("PROPS: ", dataItem);
+  // console.log("PROPS: ", dataItem);
 
   const navigation = useNavigation();
 
@@ -31,7 +31,6 @@ const FileScreen = () => {
 
   const allCategories = () => {
     return dataItem.categories.map((category) => {
-      console.log(category.name);
       return (
         <View key={category.id} style={styles.buttonStyle}>
           <Text style={styles.buttonText}>{category.name}</Text>

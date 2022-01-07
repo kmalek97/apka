@@ -21,7 +21,7 @@ const FileScreen = () => {
   const {
     params: { dataItem },
   } = useRoute<IFileScreenProps>();
-  // console.log("PROPS: ", dataItem);
+  console.log("PROPS: ", dataItem);
 
   const navigation = useNavigation();
 

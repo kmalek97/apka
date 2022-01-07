@@ -22,6 +22,7 @@ export type RootStackParamList = {
   Register: undefined;
   ViewMedia: undefined;
   Payment: undefined;
+  SearchScreen: undefined;
 };
 
 export type IAplicationNavigationProps = IAplicationState;

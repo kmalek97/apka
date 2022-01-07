@@ -14,6 +14,7 @@ import FileScreen from "../../screens/fileScreen/FileScreen";
 import { RootStackParamList } from "./AplicationNavigation.types";
 import ViewMedia from "../../screens/viewMedia/ViewMedia.screen";
 import Payment from "../../screens/payment/Payment.screen";
+import SearchScreen from "../../screens/searchScreen/SearchScreen.screen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -91,6 +92,7 @@ export default function AplicationNavigation() {
             />
             <Stack.Screen name="ViewMedia" component={ViewMedia} />
             <Stack.Screen name="Payment" component={Payment} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
           </>
         ) : (
           <>

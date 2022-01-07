@@ -21,7 +21,7 @@ export default function EbookOrAudiobooks() {
           mode="outlined"
           onPress={() => setSelectedType("ebook")}
         >
-          Ebook
+          Ebooks
         </Button>
 
         <Button

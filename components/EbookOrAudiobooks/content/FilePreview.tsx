@@ -79,7 +79,6 @@ const FilePreview = ({
             navigation.navigate("FileScreen", {
               dataItem: { ...dataItem, id: item.id },
             });
-            console.log("LEELELEL: ", selectedType);
           }}
         >
           <Card.Cover

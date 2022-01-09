@@ -23,6 +23,8 @@ export type RootStackParamList = {
   ViewMedia: undefined;
   Payment: undefined;
   SearchScreen: undefined;
+  ObservedEbooks: undefined;
+  ObservedAudiobooks: undefined;
 };
 
 export type IAplicationNavigationProps = IAplicationState;

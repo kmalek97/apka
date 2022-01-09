@@ -10,11 +10,13 @@ import UserAccount from "../../screens/userAccount";
 import MainScreen from "../../screens/mainScreen/MainScreen.screen";
 import AddEbookForm from "../../screens/addEbookForm";
 import AddAudiobookForm from "../../screens/addAudiobookForm/";
-import FileScreen from "../../screens/fileScreen/FileScreen";
+import FileScreen from "../../screens/fileScreen";
 import { RootStackParamList } from "./AplicationNavigation.types";
 import ViewMedia from "../../screens/viewMedia/ViewMedia.screen";
 import Payment from "../../screens/payment/Payment.screen";
 import SearchScreen from "../../screens/searchScreen/SearchScreen.screen";
+import ObservedEbooks from "../../screens/ObservedEbooks/ObservedEbooks.screen";
+import ObservedAudiobooks from "../../screens/observedAudiobooks/ObservedAudiobooks.screen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -93,6 +95,8 @@ export default function AplicationNavigation() {
             <Stack.Screen name="ViewMedia" component={ViewMedia} />
             <Stack.Screen name="Payment" component={Payment} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="ObservedEbooks" component={ObservedEbooks} />
+            <Stack.Screen name="ObservedAudiobooks" component={ObservedAudiobooks} />
           </>
         ) : (
           <>

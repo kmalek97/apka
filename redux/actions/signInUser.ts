@@ -28,7 +28,10 @@ const signInUser = (values: ISignInProps, navigation: any) => {
               email: firebase.auth().currentUser?.email,
               nickname: snapshot.data()?.nickname,
               downloadURL: snapshot.data()?.downloadURL,
+              observedEbooks: snapshot.data()?.observedEbooks,
+              observedAudiobooks: snapshot.data()?.observedAudiobooks,
             };
+            console.log(data);
             dispatch({ type: LOADER_OFF });
             dispatch({ type: USER_DATA_CHANGE, payload: data });
             getCategories()(dispatch);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import {
   Appbar,
   Avatar,
@@ -7,6 +7,7 @@ import {
   Divider,
   Headline,
   Menu,
+  List,
 } from "react-native-paper";
 import firebase from "firebase";
 import Wrapper from "../../components/Wrapper";
@@ -16,6 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import SelfActivityIndicator from "../../components/ActivityIndicator/SelfActivityIndicator";
+import { ebooks } from "../../redux/reducers/ebooks";
 
 const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
   useEffect(() => {
@@ -29,6 +31,9 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
   };
 
   const navigation = useNavigation();
+
+  const [ebooksMap, setEbooksMap] = useState<any>([]);
+  const [audiobooksMap, setAudiobooksMap] = useState<any>([]);
 
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
@@ -79,6 +84,47 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
       downloadURL,
     });
   };
+
+  const listItemEbook = async () => {
+    let allData: Array<any> = [];
+    const finalData: Array<any> = [];
+
+    await firebase.firestore().collection('ebooks').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        allData.push({ id: doc.id, ...doc.data() })
+      })
+    });
+
+    userState.observedEbooks.forEach((ebook) => {
+      finalData.push(allData.find(s => s.id === ebook))
+    })
+
+    setEbooksMap(finalData);
+    navigation.navigate("ObservedEbooks", {
+      finalData,
+    })
+  };
+
+  const listItemAudiobook = async () => {
+    let allData: Array<any> = [];
+    const finalData: Array<any> = [];
+
+    await firebase.firestore().collection('audiobooks').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        allData.push({ id: doc.id, ...doc.data() })
+      })
+    });
+
+    userState.observedAudiobooks.forEach((ebook) => {
+      finalData.push(allData.find(s => s.id === ebook))
+    })
+
+    setAudiobooksMap(finalData);
+    navigation.navigate("ObservedAudiobooks", {
+      finalData,
+    })
+  };
+
 
   return (
     <Wrapper>
@@ -140,6 +186,22 @@ const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
               dadada
             </Button>
           </View>
+          {userState.userName ?
+            <List.Accordion
+              title="Observed"
+            >
+              {!userState.observedEbooks ? null
+                : <List.Item title="Ebooks" onPress={listItemEbook} />
+              }
+              {!userState.observedAudiobooks ? null
+                : <List.Item title="Audiobooks" onPress={listItemAudiobook} />
+              }
+
+            </List.Accordion>
+            :
+            null
+          }
+
         </>
       )}
     </Wrapper>

@@ -12,6 +12,8 @@ export interface IUserAccountProps {
     userRole: string;
     userName: string;
     userAvatar: string;
+    observedEbooks: string[];
+    observedAudiobooks: string[];
   };
   isLoading: boolean;
 }

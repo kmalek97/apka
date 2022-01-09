@@ -8,6 +8,8 @@ const initialState = {
   userRole: "",
   userName: "",
   userAvatar: "",
+  odservedEbooks: [],
+  odservedAudiobooks: [],
 };
 
 export const user = (state = initialState, action: AnyAction) => {
@@ -25,6 +27,8 @@ export const user = (state = initialState, action: AnyAction) => {
         userRole: action.payload.role,
         userName: action.payload.nickname,
         userAvatar: action.payload.downloadURL,
+        observedEbooks: action.payload.observedEbooks,
+        observedAudiobooks: action.payload.observedAudiobooks,
       };
     default:
       return state;

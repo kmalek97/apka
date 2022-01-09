@@ -2,6 +2,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import {
+  Button,
   Divider,
   Headline,
   Paragraph,
@@ -17,11 +18,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import { styles as useStyles } from "./FileScreen.styles";
 import { AntDesign } from "@expo/vector-icons";
 
-const FileScreen = () => {
+const FileScreen = ({ userState }: any) => {
   const {
     params: { dataItem },
   } = useRoute<IFileScreenProps>();
-  console.log("PROPS: ", dataItem);
+
+  const arrayOfEbooks: string[] = userState.observedEbooks;
+  const arrayOfAudiobooks: string[] = userState.observedAudiobooks;
 
   const navigation = useNavigation();
 
@@ -53,6 +56,8 @@ const FileScreen = () => {
           >
             <AntDesign name="play" size={44} color={theme.colors.primary} />
           </TouchableOpacity>
+          <Button mode="contained" labelStyle={{ color: theme.colors.accent }}
+            onPress={() => console.log("hehe")}>Observe</Button>
           <Divider
             style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
           />

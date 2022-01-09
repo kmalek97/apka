@@ -40,7 +40,7 @@ const SearchScreen = () => {
         <AntDesign name="search1" size={24} color="#7F8283" />
         <TextInput
           style={styles.inputText}
-          placeholder="Type Here"
+          placeholder="Title"
           onChangeText={(search) => fetchData(search)}
         />
       </View>

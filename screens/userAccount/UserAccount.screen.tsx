@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import SelfActivityIndicator from "../../components/ActivityIndicator/SelfActivityIndicator";
 import { ebooks } from "../../redux/reducers/ebooks";
 
-const UserAccount = ({ userState, isLoading }: IUserAccountProps) => {
+const UserAccount = ({ userState, isLoading, paymentStatus }: IUserAccountProps) => {
   useEffect(() => {
     if (!userState.userName) {
       signOut();

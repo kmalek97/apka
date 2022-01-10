@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Appbar, Menu } from 'react-native-paper';
 import EbookOrAudiobooks from '../../components/EbookOrAudiobooks/EbookOrAudiobooks.component';
 import Wrapper from '../../components/Wrapper';
 import { styles } from './Home.styles';
-import firebase from 'firebase';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Home() {
-  const ads = () => {
-    firebase.auth().signOut();
-  };
+export default function Home({ paymentStatus }: any) {
+
+  useEffect(() => {
+    paymentStatus()
+  }, [])
 
   const navigation = useNavigation();
 
@@ -22,7 +22,6 @@ export default function Home() {
     <Wrapper>
       <Appbar.Header>
         <Appbar.Content title="All Books" color="#E5E7E9" />
-        {/* <Appbar.Action icon="dots-horizontal" color="#E5E7E9" onPress={ads} /> */}
         <Menu
           visible={menuVisible}
           onDismiss={closeMenu}

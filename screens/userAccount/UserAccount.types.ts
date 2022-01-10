@@ -16,4 +16,5 @@ export interface IUserAccountProps {
     observedAudiobooks: string[];
   };
   isLoading: boolean;
+  paymentStatus: any;
 }

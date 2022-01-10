@@ -1,9 +1,11 @@
 import { AnyAction } from "redux";
 
 import {
+  GET_PAYMENT_STATUS,
   USER_DATA_CHANGE,
   USER_OBSERVED_CHANGE,
   USER_SET_AVATAR,
+
 } from "../constants";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   userAvatar: "",
   odservedEbooks: [],
   odservedAudiobooks: [],
+  paymentStatus: '',
 };
 
 export const user = (state = initialState, action: AnyAction) => {
@@ -22,6 +25,11 @@ export const user = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         userAvatar: action.payload,
+      };
+    case GET_PAYMENT_STATUS:
+      return {
+        ...state,
+        paymentStatus: action.payload,
       };
     case USER_DATA_CHANGE:
       return {

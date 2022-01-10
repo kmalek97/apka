@@ -1,10 +1,17 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { AnyAction, bindActionCreators, Dispatch } from "redux";
+
+import { paymentStatus } from "../../redux/actions";
 
 import Home from './Home.screen';
-import {IAplicationState, IStateProps} from './Home.types';
+import { IAplicationState, IStateProps } from './Home.types';
 
-const mapStateToProps = (state: IStateProps): IAplicationState => ({
+export const mapStateToProps = (state: IStateProps): IAplicationState => ({
   userToken: state.userState.userToken,
 });
 
-export default connect(mapStateToProps)(Home);
+export const mapDispatchProps = (dispatch: Dispatch<AnyAction>) =>
+  bindActionCreators({ paymentStatus }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchProps)(Home);
+

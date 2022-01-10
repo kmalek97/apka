@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button, Text } from "react-native-paper";
 import base64 from "base-64";
+import WebView from "react-native-webview";
 
 const API_URL = "http://localhost:3000";
 
@@ -34,26 +35,26 @@ const Payment = () => {
   };
 
   const initializePaymentSheet = async () => {
-    const { paymentIntent, ephemeralKey, customer } =
-      await fetchPaymentSheetParams();
+    //   const { paymentIntent, ephemeralKey, customer } =
+    //     await fetchPaymentSheetParams();
 
-    const { error } = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-    });
-    if (!error) {
-      setLoading(true);
-    }
-  };
+    //   const { error } = await initPaymentSheet({
+    //     customerId: customer,
+    //     customerEphemeralKeySecret: ephemeralKey,
+    //     paymentIntentClientSecret: paymentIntent,
+    //   });
+    //   if (!error) {
+    //     setLoading(true);
+    //   }
+    // };
 
-  const openPaymentSheet = async () => {
-    const { error } = await presentPaymentSheet();
-    const uidd = await firebase.auth().currentUser?.uid;
+    const openPaymentSheet = async () => {
+      // const { error } = await presentPaymentSheet();
+      const uidd = await firebase.auth().currentUser?.uid;
 
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
+      // if (error) {
+      //   Alert.alert(`Error code: ${error.code}`, error.message);
+      // } else {
       await firebase
         .firestore()
         .collection("users")
@@ -65,12 +66,33 @@ const Payment = () => {
           amount: 1099,
           currency: "eur",
         });
-      Alert.alert("Success", "Your order is confirmed!");
-    }
+      // Alert.alert("Success", "Your order is confirmed!");
+    };
+  };
+
+  const openPaymentSheet = async () => {
+    // const { error } = await presentPaymentSheet();
+    const uidd = await firebase.auth().currentUser?.uid;
+
+    // if (error) {
+    //   Alert.alert(`Error code: ${error.code}`, error.message);
+    // } else {
+    await firebase
+      .firestore()
+      .collection("users")
+      .doc(uidd)
+      .collection("checkout_sessions")
+      .add({
+        price: "price_1K7fljI4IOxw6fNyTkdBQdKv",
+        success_url: "https://www.google.pl/",
+        cancel_url: "https://www.google.pl/",
+      });
+    // Alert.alert("Success", "Your order is confirmed!");
   };
 
   useEffect(() => {
-    initializePaymentSheet();
+    // initializePaymentSheet();
+    openPaymentSheet();
   }, []);
 
   const fetchPaymentIntentClientSecret = async () => {
@@ -178,8 +200,8 @@ const Payment = () => {
   };
 
   return (
-    <View>
-      <CardField
+    <View style={{ flex: 1 }}>
+      {/* <CardField
         postalCodeEnabled={false}
         autofocus
         placeholder={{
@@ -198,7 +220,12 @@ const Payment = () => {
         cardStyle={inputStyles}
       />
       <Button onPress={openPaymentSheet}>Pay</Button>
-      <Text>asd</Text>
+      <Text>asd</Text> */}
+      <WebView
+        source={{ uri: "https://buy.stripe.com/test_dR614w96ifC32K4289" }}
+        // source={{ uri: "https://www.google.pl/" }}
+        // source={{ html: "<h1><center>Hello world</center></h1>" }}
+      />
     </View>
   );
 };

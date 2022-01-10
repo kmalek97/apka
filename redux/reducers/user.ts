@@ -1,6 +1,10 @@
 import { AnyAction } from "redux";
 
-import { USER_DATA_CHANGE, USER_SET_AVATAR } from "../constants";
+import {
+  USER_DATA_CHANGE,
+  USER_OBSERVED_CHANGE,
+  USER_SET_AVATAR,
+} from "../constants";
 
 const initialState = {
   userId: "",
@@ -27,6 +31,12 @@ export const user = (state = initialState, action: AnyAction) => {
         userRole: action.payload.role,
         userName: action.payload.nickname,
         userAvatar: action.payload.downloadURL,
+        observedEbooks: action.payload.observedEbooks,
+        observedAudiobooks: action.payload.observedAudiobooks,
+      };
+    case USER_OBSERVED_CHANGE:
+      return {
+        ...state,
         observedEbooks: action.payload.observedEbooks,
         observedAudiobooks: action.payload.observedAudiobooks,
       };

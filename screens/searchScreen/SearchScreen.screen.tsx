@@ -1,14 +1,22 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import firebase from 'firebase';
-import React, { useState } from 'react'
-import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation, useRoute } from "@react-navigation/native";
+import firebase from "firebase";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { styles } from "./SearchScreen.styles";
+import { Searchbar } from "react-native-paper";
 
 const SearchScreen = () => {
-
   const navigation = useNavigation();
-  const { params: { type } }: any = useRoute();
+  const {
+    params: { type },
+  }: any = useRoute();
 
   const [books, setBooks] = useState<any>([]);
 
@@ -34,9 +42,7 @@ const SearchScreen = () => {
 
   return (
     <View>
-      <View
-        style={styles.inputContainer}
-      >
+      <View style={styles.inputContainer}>
         <AntDesign name="search1" size={24} color="#7F8283" />
         <TextInput
           style={styles.inputText}
@@ -54,7 +60,9 @@ const SearchScreen = () => {
           return (
             <TouchableOpacity
               style={styles.userButton}
-              onPress={() => navigation?.navigate("FileScreen", { dataItem: item })}
+              onPress={() =>
+                navigation?.navigate("FileScreen", { dataItem: item })
+              }
             >
               <Text style={styles.userText}>{item.title}</Text>
             </TouchableOpacity>
@@ -62,7 +70,7 @@ const SearchScreen = () => {
         }}
       />
     </View>
-  )
-}
+  );
+};
 
 export default SearchScreen;

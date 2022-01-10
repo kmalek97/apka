@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { GET_AUDIOBOOKS_NEXT, GET_EBOOKS } from "../constants";
+import { GET_AUDIOBOOKS_NEXT, GET_EBOOKS, GET_EBOOKS_NEXT } from "../constants";
 import { GET_AUDIOBOOKS } from "../constants";
 
 const getFile = (option: string, lastElement?: any) => {
@@ -12,12 +12,15 @@ const getFile = (option: string, lastElement?: any) => {
     lastElement?: any
   ) => {
     const data = snapshot.docs;
+    // console.log("lastElement", lastElement);
     dispatch({
       type:
         option === "audio"
           ? !!lastElement
             ? GET_AUDIOBOOKS_NEXT
             : GET_AUDIOBOOKS
+          : !!lastElement
+          ? GET_EBOOKS_NEXT
           : GET_EBOOKS,
       payload: data,
     });

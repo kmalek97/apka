@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import {
   Button,
@@ -17,14 +17,18 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
 import { styles as useStyles } from "./FileScreen.styles";
 import { AntDesign } from "@expo/vector-icons";
+import firebase from "firebase";
 
-const FileScreen = ({ userState }: any) => {
+const FileScreen = ({ userState, updateUser }: any) => {
   const {
     params: { dataItem },
   } = useRoute<IFileScreenProps>();
 
-  const arrayOfEbooks: string[] = userState.observedEbooks;
-  const arrayOfAudiobooks: string[] = userState.observedAudiobooks;
+  useEffect(() => {
+    handleButtonTitle();
+  }, []);
+
+  const [buttonTitle, setButtonTitle] = useState("");
 
   const navigation = useNavigation();
 
@@ -42,6 +46,100 @@ const FileScreen = ({ userState }: any) => {
     });
   };
 
+  const handleObserve = async () => {
+    if (
+      Number(dataItem.numberOfPages) > 0 &&
+      buttonTitle === "Press to observe"
+    ) {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .update({
+          observedEbooks: firebase.firestore.FieldValue.arrayUnion(dataItem.id),
+        })
+        .catch((err) => alert("Connection error"));
+
+      updateUser();
+      setButtonTitle("Observed");
+    } else if (
+      Number(dataItem.numberOfPages) > 0 &&
+      buttonTitle === "Observed"
+    ) {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .update({
+          observedEbooks: firebase.firestore.FieldValue.arrayRemove(
+            dataItem.id
+          ),
+        })
+        .catch((err) => alert("Connection error"));
+
+      updateUser();
+      setButtonTitle("Press to observe");
+    } else if (dataItem.lector && buttonTitle === "Press to observe") {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .update({
+          observedAudiobooks: firebase.firestore.FieldValue.arrayUnion(
+            dataItem.id
+          ),
+        })
+        .catch((err) => alert("Connection error"));
+
+      updateUser();
+      setButtonTitle("Observed");
+    } else if (dataItem.lector && buttonTitle === "Observed") {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .update({
+          observedAudiobooks: firebase.firestore.FieldValue.arrayRemove(
+            dataItem.id
+          ),
+        })
+        .catch((err) => alert("Connection error"));
+
+      updateUser();
+      setButtonTitle("Press to observe");
+    } else {
+      alert("You have to be loged in!");
+    }
+  };
+
+  const handleButtonTitle = () => {
+    if (Number(dataItem.numberOfPages) > 0) {
+      if (userState.observedEbooks === undefined) {
+        setButtonTitle("Log in to observe");
+      } else if (
+        userState.observedEbooks.find(
+          (observedEbook: any) => observedEbook === dataItem.id
+        )
+      ) {
+        setButtonTitle("Observed");
+      } else {
+        setButtonTitle("Press to observe");
+      }
+    } else {
+      if (userState.observedAudiobooks === undefined) {
+        setButtonTitle("Log in to observe");
+      } else if (
+        userState.observedAudiobooks.find(
+          (observedAudiobook: any) => observedAudiobook === dataItem.id
+        )
+      ) {
+        setButtonTitle("Observed");
+      } else {
+        setButtonTitle("Press to observe");
+      }
+    }
+  };
+
   const differentContent = () => {
     if (Number(dataItem.numberOfPages) > 0) {
       return (
@@ -56,8 +154,13 @@ const FileScreen = ({ userState }: any) => {
           >
             <AntDesign name="play" size={44} color={theme.colors.primary} />
           </TouchableOpacity>
-          <Button mode="contained" labelStyle={{ color: theme.colors.accent }}
-            onPress={() => console.log("hehe")}>Observe</Button>
+          <Button
+            mode="contained"
+            labelStyle={{ color: theme.colors.accent }}
+            onPress={handleObserve}
+          >
+            {buttonTitle}
+          </Button>
           <Divider
             style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
           />
@@ -105,6 +208,13 @@ const FileScreen = ({ userState }: any) => {
         >
           <AntDesign name="play" size={44} color={theme.colors.primary} />
         </TouchableOpacity>
+        <Button
+          mode="contained"
+          labelStyle={{ color: theme.colors.accent }}
+          onPress={handleObserve}
+        >
+          {buttonTitle}
+        </Button>
         <Divider
           style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
         />

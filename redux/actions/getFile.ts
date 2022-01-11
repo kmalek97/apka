@@ -12,7 +12,6 @@ const getFile = (option: string, lastElement?: any) => {
     lastElement?: any
   ) => {
     const data = snapshot.docs;
-    // console.log("lastElement", lastElement);
     dispatch({
       type:
         option === "audio"
@@ -20,8 +19,8 @@ const getFile = (option: string, lastElement?: any) => {
             ? GET_AUDIOBOOKS_NEXT
             : GET_AUDIOBOOKS
           : !!lastElement
-          ? GET_EBOOKS_NEXT
-          : GET_EBOOKS,
+            ? GET_EBOOKS_NEXT
+            : GET_EBOOKS,
       payload: data,
     });
 
@@ -29,21 +28,20 @@ const getFile = (option: string, lastElement?: any) => {
   };
 
   return (dispatch: (arg0: { type: string; payload?: any }) => void) => {
-    console.log("lastElement", lastElement);
     !lastElement
       ? query
-          .limit(2)
-          .get()
-          .then((snapshot) => {
-            getFunction(snapshot, dispatch);
-          })
+        .limit(2)
+        .get()
+        .then((snapshot) => {
+          getFunction(snapshot, dispatch);
+        })
       : query
-          .startAfter(lastElement || 0)
-          .limit(1)
-          .get()
-          .then((snapshot) => {
-            getFunction(snapshot, dispatch, lastElement);
-          });
+        .startAfter(lastElement || 0)
+        .limit(1)
+        .get()
+        .then((snapshot) => {
+          getFunction(snapshot, dispatch, lastElement);
+        });
   };
 };
 

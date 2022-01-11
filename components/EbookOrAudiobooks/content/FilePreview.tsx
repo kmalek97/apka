@@ -48,7 +48,6 @@ const FilePreview = ({
     console.log("info.distanceFromEnd", info.distanceFromEnd);
 
     if (info.distanceFromEnd < 0 && !type.empty) {
-      // console.log("type[type.length - 1]", type[type.length - 1]);
       getFile(selectedType, type[type.length - 1]);
     }
   };

@@ -3,7 +3,6 @@ import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store";
 import * as firebase from "firebase";
-// import { getFunctions } from "firebase/functions";
 import { StripeProvider } from "@stripe/stripe-react-native";
 
 import AplicationNavigation from "./components/AplicationNavigation";
@@ -17,11 +16,9 @@ var firebaseConfig = {
   appId: "1:308073493480:web:eac3aebec6637ad19fea5d",
   measurementId: "G-8QX7WSX3PN",
 };
-// Initialize Firebase
+
 if (firebase.default.apps.length === 0) {
-  const app = firebase.default.initializeApp(firebaseConfig);
-  // firebase.default.functions.;
-  // getFunctions(app);
+  firebase.default.initializeApp(firebaseConfig);
 }
 
 function App() {

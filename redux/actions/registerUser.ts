@@ -33,7 +33,6 @@ const registerUser = (values: IRegisterValues, navigation: any) => {
             .doc(res.user?.uid)
             .set(data)
             .then(() => {
-              console.log("user saved");
               dispatch({ type: LOADER_OFF });
             })
             .catch((err) => {

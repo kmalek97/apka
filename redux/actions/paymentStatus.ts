@@ -9,7 +9,6 @@ const paymentStatus = () => {
         .currentUser?.getIdTokenResult(true)
         .then((result) => {
           const data = result.claims?.stripeRole;
-          console.log("DANEasd: ", data);
           dispatch({ type: GET_PAYMENT_STATUS, payload: data });
         });
     } catch (err) {

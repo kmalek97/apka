@@ -31,7 +31,6 @@ const signInUser = (values: ISignInProps, navigation: any) => {
               observedEbooks: snapshot.data()?.observedEbooks,
               observedAudiobooks: snapshot.data()?.observedAudiobooks,
             };
-            console.log(data);
             dispatch({ type: LOADER_OFF });
             dispatch({ type: USER_DATA_CHANGE, payload: data });
             getCategories()(dispatch);
@@ -43,7 +42,7 @@ const signInUser = (values: ISignInProps, navigation: any) => {
       })
       .catch((err) => {
         navigation.navigate("Login", { wrongData: true });
-        console.log("error kurde: ", err);
+        console.log(err);
         dispatch({ type: LOADER_OFF });
       });
   };

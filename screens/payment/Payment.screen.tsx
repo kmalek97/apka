@@ -1,4 +1,5 @@
 import firebase from "firebase";
+require('firebase/functions')
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import WebView, { WebViewNavigation } from "react-native-webview";
@@ -31,13 +32,10 @@ const Payment = ({ userState }: any) => {
   };
 
   const openPaymentSheet = async () => {
-    const uid = await firebase.auth().currentUser?.uid;
-    // console.log(userState);
     const docRef = await firebase
       .firestore()
       .collection("users")
       .doc(userState.userId)
-      // .doc(uid)
       .collection("checkout_sessions")
       .add({
         price: "price_1K7fljI4IOxw6fNyTkdBQdKv",

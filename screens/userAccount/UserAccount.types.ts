@@ -14,6 +14,7 @@ export interface IUserAccountProps {
     userAvatar: string;
     observedEbooks: string[];
     observedAudiobooks: string[];
+    paymentStatus: string[];
   };
   isLoading: boolean;
   paymentStatus: any;

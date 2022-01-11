@@ -13,7 +13,7 @@ import AddAudiobookForm from "../../screens/addAudiobookForm/";
 import FileScreen from "../../screens/fileScreen";
 import { RootStackParamList } from "./AplicationNavigation.types";
 import ViewMedia from "../../screens/viewMedia/ViewMedia.screen";
-import Payment from "../../screens/payment/Payment.screen";
+import Payment from "../../screens/payment";
 import SearchScreen from "../../screens/searchScreen/SearchScreen.screen";
 import ObservedEbooks from "../../screens/ObservedEbooks/ObservedEbooks.screen";
 import ObservedAudiobooks from "../../screens/observedAudiobooks/ObservedAudiobooks.screen";
@@ -96,7 +96,10 @@ export default function AplicationNavigation() {
             <Stack.Screen name="Payment" component={Payment} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
             <Stack.Screen name="ObservedEbooks" component={ObservedEbooks} />
-            <Stack.Screen name="ObservedAudiobooks" component={ObservedAudiobooks} />
+            <Stack.Screen
+              name="ObservedAudiobooks"
+              component={ObservedAudiobooks}
+            />
           </>
         ) : (
           <>

@@ -115,7 +115,7 @@ const FileScreen = ({ userState, updateUser }: any) => {
   const handleButtonTitle = () => {
     if (Number(dataItem.numberOfPages) > 0) {
       if (userState.observedEbooks === undefined) {
-        setButtonTitle("Log in to observe");
+        setButtonTitle("Press to observe");
       } else if (
         userState.observedEbooks.find(
           (observedEbook: any) => observedEbook === dataItem.id
@@ -127,7 +127,7 @@ const FileScreen = ({ userState, updateUser }: any) => {
       }
     } else {
       if (userState.observedAudiobooks === undefined) {
-        setButtonTitle("Log in to observe");
+        setButtonTitle("Press to observe");
       } else if (
         userState.observedAudiobooks.find(
           (observedAudiobook: any) => observedAudiobook === dataItem.id
@@ -144,23 +144,35 @@ const FileScreen = ({ userState, updateUser }: any) => {
     if (Number(dataItem.numberOfPages) > 0) {
       return (
         <View>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ViewMedia", {
-                dataItem,
-              })
-            }
-            style={styles.iconAndTimeContainer}
-          >
-            <AntDesign name="play" size={44} color={theme.colors.primary} />
-          </TouchableOpacity>
-          <Button
-            mode="contained"
-            labelStyle={{ color: theme.colors.accent }}
-            onPress={handleObserve}
-          >
-            {buttonTitle}
-          </Button>
+          {userState.paymentStatus ? (
+            <>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("ViewMedia", {
+                    dataItem,
+                  })
+                }
+                style={styles.iconAndTimeContainer}
+              >
+                <AntDesign name="play" size={44} color={theme.colors.primary} />
+              </TouchableOpacity>
+              <Button
+                mode="contained"
+                labelStyle={{ color: theme.colors.accent }}
+                onPress={handleObserve}
+              >
+                {buttonTitle}
+              </Button>
+            </>
+          ) : (
+            <Button
+              mode="contained"
+              labelStyle={{ color: theme.colors.accent }}
+            >
+              you have to be subscriber
+            </Button>
+          )}
+
           <Divider
             style={{ backgroundColor: theme.colors.primary, marginTop: 10 }}
           />
